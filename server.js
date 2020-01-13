@@ -10,19 +10,21 @@ const app = express()
 // Bearer API token value. The endpoint should have general security in place 
 // such as best practice headers and support for CORS.
 
-app.use(morgan('dev'))
+// check to see if the NODE_ENV is set to "production" or not, 
+// and set the value for morgan as appropriate.
+const morganSetting = provess.env.NODE_ENV === 'production' ? 'tiny' : 'common'
+app.use(morgan(morganSetting))
+
 app.use(helmet())
 app.use(cors())
 
 app.use(function validatorBearerToken(req, res, next) {
-    console.log(process.env.API_TOKEN)
     const apiToken = process.env.API_TOKEN
     const authToken = req.get('Authorization')
     // Authentication token must be present and bearerToken must match apiToken
-    if(!authToken || req.get('Authorization').split(' ') !== apiToken) {
+    if(!authToken || req.get('Authorization').split(' ')[1] !== apiToken) {
         return res.status(401).json({ error: 'Unauthorized request' })
     }
-    console.log('validate bearer token middleware');
     next()
 })
 
@@ -64,7 +66,17 @@ app.get('/movie', function handleGetMovies(req, res) {
     res.json(response)
 })
 
-const PORT = 8000;
+app.use((error, req, res, next) => {
+    let response
+    if( process.env.NODE_ENV === 'production') {
+        response = { error: { message: 'server error' } }
+    } else {
+        response = { error }
+    }
+    res.status(500).json(response)
+})
+
+const PORT = process.env.PORT || 9000;
 app.listen(PORT, () => {
     console.log(`Server listening to http://localhost:${PORT}`)
 })

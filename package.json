@@ -9,6 +9,9 @@
     "test": "mocha"
   },
   "keywords": [],
+  "engines": {
+    "node": "12.13.0"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
