@@ -67,6 +67,7 @@ app.get('/movie', function handleGetMovies(req, res) {
 })
 
 app.use((error, req, res, next) => {
+    console.log(error)
     let response
     if( process.env.NODE_ENV === 'production') {
         response = { error: { message: 'server error' } }
