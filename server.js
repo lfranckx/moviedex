@@ -12,7 +12,7 @@ const app = express()
 
 // check to see if the NODE_ENV is set to "production" or not, 
 // and set the value for morgan as appropriate.
-const morganSetting = provess.env.NODE_ENV === 'production' ? 'tiny' : 'common'
+const morganSetting = process.env.NODE_ENV === 'production' ? 'tiny' : 'common'
 app.use(morgan(morganSetting))
 
 app.use(helmet())
