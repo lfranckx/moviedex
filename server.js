@@ -6,18 +6,17 @@ const cors = require('cors')
 const movielist = require('./movies-small-data')
 const app = express()
 
-app.use(morgan('dev'))
-app.use(helmet())
-app.use(cors())
-
-
 // The endpoint only responds when given a valid Authorization header with a 
 // Bearer API token value. The endpoint should have general security in place 
 // such as best practice headers and support for CORS.
 
+app.use(morgan('dev'))
+app.use(helmet())
+app.use(cors())
+
 app.use(function validatorBearerToken(req, res, next) {
-    console.log(process.env.API_Token)
-    const apiToken = process.env.API_Token
+    console.log(process.env.API_TOKEN)
+    const apiToken = process.env.API_TOKEN
     const authToken = req.get('Authorization')
     // Authentication token must be present and bearerToken must match apiToken
     if(!authToken || req.get('Authorization').split(' ') !== apiToken) {
